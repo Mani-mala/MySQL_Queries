@@ -1,0 +1,171 @@
+
+//DATABASE CREATION FOR FOODHUB:
+===============================
+mysql> create database FoodHub;
+Query OK, 1 row affected (0.02 sec)
+
+
+//TO USE DATABSE
+================
+mysql> use FoodHub;
+Database changed
+
+
+//HOTELS TABLE
+==============
+mysql> create table Hotels(Hotel_Id int primary key,Hotel_Name varchar(50) not null,Location varchar(50) not null,Contact_no varchar(12) not null);
+Query OK, 0 rows affected (0.08 sec)
+
+
+// FOOD LIST TABLE
+==================
+mysql> create table FoodList(Food_Id int primary key,Food_Name varchar(50) not null);
+Query OK, 0 rows affected (0.07 sec)
+
+
+//HOTEL MENU TABLE
+==================
+mysql> create table HotelMenu(Hotel_Id int,Food_Id int,Price float(10,3),
+    -> primary key(Hotel_Id,Food_Id),
+    -> foreign key (Hotel_Id) references Hotels(Hotel_Id),
+    -> foreign key (Food_Id) references FoodList(Food_Id));
+Query OK, 0 rows affected, 1 warning (0.16 sec)
+
+
+//INSERT VALUES TO HOTELS
+=========================
+mysql> INSERT INTO Hotels(Hotel_Id, Hotel_Name, Location, Contact_no) VALUES
+    -> (1222, 'Thalapakattu', 'S.V.Karai', '6364782782'),
+    -> (5362, 'Royal', 'Tenkasi', '7361252178'),
+    -> (4255, 'Velan', 'Chennai', '6356357180'),
+    -> (6271, 'Aaryas', 'Tirunelveli', '727823772');
+Query OK, 4 rows affected (0.03 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+//INSERT VALUES TO FOODLIST
+===========================
+mysql> insert into FoodList(Food_Id,Food_Name) values
+    -> (1,'Chicken Biryani'),
+    -> (2,'Dosa'),
+    -> (3,'Idly'),
+    -> (4,'Veg Meals'),
+    -> (5,'Non_Veg Meals'),
+    -> (6,'Tomato Rice');
+Query OK, 6 rows affected (0.01 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+//ALTER TABLE HOTELMENU TO ADD EXTRA COLUMN (RATINGS)
+=====================================================
+mysql> alter table HotelMenu
+    -> add Ratings float(2,1) default 0.0
+    -> check (Ratings >=0.0 && Ratings<=5.0);
+Query OK, 0 rows affected, 2 warnings (0.20 sec)
+Records: 0  Duplicates: 0  Warnings: 2
+
+
+//INSERT VALUES TO HOTELMENU
+============================
+mysql> insert into HotelMenu(Hotel_Id,Food_Id,Price,Ratings) values
+    -> (1222,1,230.00,4),
+    -> (1222,5,300.00,4.5),
+    -> (5362,2,70.00,4.2),
+    -> (5362,3,30.00,4.4),
+    -> (4255,2,80.00,4.4),
+    -> (4255,3,20.00,4.1),
+    -> (4255,4,200.00,4.7),
+    -> (6271,6,100.00,4.7),
+    -> (6271,4,300.00,4.1),
+    -> (6271,1,300.00,4.3);
+Query OK, 10 rows affected (0.01 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+
+//TO VIEW TABLES IN A DATABASE
+==============================
+
+mysql> use FoodHub;
+Database changed
+mysql> show tables;
++-------------------+
+| Tables_in_foodhub |
++-------------------+
+| foodlist          |
+| hotelmenu         |
+| hotels            |
++-------------------+
+3 rows in set (0.02 sec)
+
+mysql> select * from hotels;
++----------+--------------+-------------+------------+
+| Hotel_Id | Hotel_Name   | Location    | Contact_no |
++----------+--------------+-------------+------------+
+|     1222 | Thalapakattu | S.V.Karai   | 6364782782 |
+|     4255 | Velan        | Chennai     | 6356357180 |
+|     5362 | Royal        | Tenkasi     | 7361252178 |
+|     6271 | Aaryas       | Tirunelveli | 727823772  |
++----------+--------------+-------------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from foodlist;
++---------+-----------------+
+| Food_Id | Food_Name       |
++---------+-----------------+
+|       1 | Chicken Biryani |
+|       2 | Dosa            |
+|       3 | Idly            |
+|       4 | Veg Meals       |
+|       5 | Non_Veg Meals   |
+|       6 | Tomato Rice     |
++---------+-----------------+
+6 rows in set (0.00 sec)
+
+mysql> select * from hotelmenu;
++----------+---------+---------+---------+
+| Hotel_Id | Food_Id | Price   | Ratings |
++----------+---------+---------+---------+
+|     1222 |       1 | 230.000 |     4.0 |
+|     1222 |       5 | 300.000 |     4.5 |
+|     4255 |       2 |  80.000 |     4.4 |
+|     4255 |       3 |  20.000 |     4.1 |
+|     4255 |       4 | 200.000 |     4.7 |
+|     5362 |       2 |  70.000 |     4.2 |
+|     5362 |       3 |  30.000 |     4.4 |
+|     6271 |       1 | 300.000 |     4.3 |
+|     6271 |       4 | 300.000 |     4.1 |
+|     6271 |       6 | 100.000 |     4.7 |
++----------+---------+---------+---------+
+10 rows in set (0.00 sec)
+
+//TO VIEW WHICH FOOD PRESENT IN WHICH HOTEL USING FOOD NAME :
+=============================================================
+
+mysql> select H.Hotel_Name,F.Food_Name,M.Price,M.Ratings
+    -> from HotelMenu M
+    -> join Hotels H on M.Hotel_Id = H.Hotel_Id
+    -> join FoodList F on M.Food_Id = F.Food_Id
+    -> where F.Food_Name='Dosa';
++------------+-----------+--------+---------+
+| Hotel_Name | Food_Name | Price  | Ratings |
++------------+-----------+--------+---------+
+| Velan      | Dosa      | 80.000 |     4.4 |
+| Royal      | Dosa      | 70.000 |     4.2 |
++------------+-----------+--------+---------+
+2 rows in set (0.00 sec)
+
+
+//TO VIEW WHICH FOOD PRESENT IN WHICH HOTEL USING FOOD ID:
+=============================================================
+mysql> select H.Hotel_Name,F.Food_Name,M.Price,M.Ratings
+    -> from HotelMenu M
+    -> join Hotels H on M.Hotel_Id = H.Hotel_Id
+    -> join FoodList F on M.Food_Id = F.Food_Id
+    -> where F.Food_Id=1;
++--------------+-----------------+---------+---------+
+| Hotel_Name   | Food_Name       | Price   | Ratings |
++--------------+-----------------+---------+---------+
+| Thalapakattu | Chicken Biryani | 230.000 |     4.0 |
+| Aaryas       | Chicken Biryani | 300.000 |     4.3 |
++--------------+-----------------+---------+---------+
+2 rows in set (0.00 sec)
+
+================================================================================================================================================
