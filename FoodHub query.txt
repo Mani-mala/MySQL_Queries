@@ -1,4 +1,5 @@
-
+                                        BY USING 3 SEPARATE TABLES
+                                        ==========================
 //DATABASE CREATION FOR FOODHUB:
 ===============================
 mysql> create database FoodHub;
@@ -168,4 +169,68 @@ mysql> select H.Hotel_Name,F.Food_Name,M.Price,M.Ratings
 +--------------+-----------------+---------+---------+
 2 rows in set (0.00 sec)
 
-================================================================================================================================================
+======================================================================================================================
+                                                IN A SINGLE TABLE
+                                                =================
+
+//CREATE DATABASE
+=================
+mysql> create database FoodApp;
+Query OK, 1 row affected (0.01 sec)
+
+
+//USE DATABASE
+==============
+mysql> use FoodApp;
+Database changed
+
+
+//CREATE TABLE
+==============
+mysql> create table Hotels(Hotel_id int primary key auto_increment,
+    -> Hotel_name varchar(30) not null,
+    -> Location varchar(30) not null,
+    -> Contact_no varchar(12) not null,
+    -> Food_Name varchar(50) not null,
+    -> Price float(7,2) not null,
+    -> Ratings float(2,1) default 0.0 check (Ratings >=0.0 && Ratings<=5.0));
+Query OK, 0 rows affected, 3 warnings (0.07 sec)
+
+
+// SET VALUES TO TABLE
+======================
+mysql> insert into Hotels(Hotel_name, Location, Contact_no, Food_Name, Price,Ratings) values
+    -> ('Thalapakattu', 'S.V.Karai', '6364782782', 'Biriyani', 130.00,4.5),
+    -> ('Royal', 'Tenkasi', '7361252178', 'Biriyani', 120.00,3.9),
+    -> ('Velan', 'Chennai', '6356357180', 'Dosa', 40.00,4.6),
+    -> ('Aaryas', 'Tirunelveli', '7278237720', 'Dosa', 20.00,5);
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+
+//TO VIEW TABLE
+===============
+mysql> select * from Hotels;
++----------+--------------+-------------+------------+-----------+--------+---------+
+| Hotel_id | Hotel_name   | Location    | Contact_no | Food_Name | Price  | Ratings |
++----------+--------------+-------------+------------+-----------+--------+---------+
+|        1 | Thalapakattu | S.V.Karai   | 6364782782 | Biriyani  | 130.00 |     4.5 |
+|        2 | Royal        | Tenkasi     | 7361252178 | Biriyani  | 120.00 |     3.9 |
+|        3 | Velan        | Chennai     | 6356357180 | Dosa      |  40.00 |     4.6 |
+|        4 | Aaryas       | Tirunelveli | 7278237720 | Dosa      |  20.00 |     5.0 |
++----------+--------------+-------------+------------+-----------+--------+---------+
+4 rows in set (0.00 sec)
+
+
+//TO VIEW SPECIAL FOOD IN A HOTEL BY FOOD NAME
+==============================================
+mysql> select Hotel_name, Food_Name, Price,Ratings
+    -> from Hotels
+    -> where Food_Name='Dosa';
++------------+-----------+-------+---------+
+| Hotel_name | Food_Name | Price | Ratings |
++------------+-----------+-------+---------+
+| Velan      | Dosa      | 40.00 |     4.6 |
+| Aaryas     | Dosa      | 20.00 |     5.0 |
++------------+-----------+-------+---------+
+2 rows in set (0.00 sec)
