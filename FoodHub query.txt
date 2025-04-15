@@ -255,3 +255,53 @@ mysql> select * from Hotels order by Ratings Asc;
 |        4 | Aaryas       | Tirunelveli | 7278237720 | Dosa        |  20.00 |     5.0 |
 +----------+--------------+-------------+------------+-------------+--------+---------+
 6 rows in set (0.01 sec)
+
+
+//DELETE TABLE ROW WITH TRANSACTION:(It can be undo by rollback keyword)
+========================================================================
+mysql> start transaction;
+mysql> delete from Hotels where Hotel_name='Thalapakattu';
+mysql> select * from Hotels;
++----------+------------+-------------+------------+-------------+--------+---------+
+| Hotel_id | Hotel_name | Location    | Contact_no | Food_Name   | Price  | Ratings |
++----------+------------+-------------+------------+-------------+--------+---------+
+|        2 | Royal      | Tenkasi     | 7361252178 | Biriyani    | 120.00 |     3.9 |
+|        3 | Velan      | Chennai     | 6356357180 | Dosa        |  40.00 |     4.6 |
+|        4 | Aaryas     | Tirunelveli | 7278237720 | Dosa        |  20.00 |     5.0 |
+|        3 | Velan      | Chennai     | 6356357180 | Tomato rice |  40.00 |     4.4 |
++----------+------------+-------------+------------+-------------+--------+---------+
+4 rows in set (0.00 sec)
+
+//ROLLBACK:
+===========
+mysql> rollback;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> select * from Hotels;
++----------+--------------+-------------+------------+-------------+--------+---------+
+| Hotel_id | Hotel_name   | Location    | Contact_no | Food_Name   | Price  | Ratings |
++----------+--------------+-------------+------------+-------------+--------+---------+
+|        1 | Thalapakattu | S.V.Karai   | 6364782782 | Biriyani    | 130.00 |     4.5 |
+|        2 | Royal        | Tenkasi     | 7361252178 | Biriyani    | 120.00 |     3.9 |
+|        3 | Velan        | Chennai     | 6356357180 | Dosa        |  40.00 |     4.6 |
+|        4 | Aaryas       | Tirunelveli | 7278237720 | Dosa        |  20.00 |     5.0 |
+|        1 | Thalapakattu | S.V.Karai   | 6364782782 | Tomato rice |  60.00 |     4.5 |
+|        3 | Velan        | Chennai     | 6356357180 | Tomato rice |  40.00 |     4.4 |
++----------+--------------+-------------+------------+-------------+--------+---------+
+6 rows in set (0.00 sec)
+
+
+//DELETE KEYWORD
+================
+mysql> delete from Hotels
+    -> where Food_Name='Tomato rice';
+mysql> select * from Hotels;
++----------+--------------+-------------+------------+-----------+--------+---------+
+| Hotel_id | Hotel_name   | Location    | Contact_no | Food_Name | Price  | Ratings |
++----------+--------------+-------------+------------+-----------+--------+---------+
+|        1 | Thalapakattu | S.V.Karai   | 6364782782 | Biriyani  | 130.00 |     4.5 |
+|        2 | Royal        | Tenkasi     | 7361252178 | Biriyani  | 120.00 |     3.9 |
+|        3 | Velan        | Chennai     | 6356357180 | Dosa      |  40.00 |     4.6 |
+|        4 | Aaryas       | Tirunelveli | 7278237720 | Dosa      |  20.00 |     5.0 |
++----------+--------------+-------------+------------+-----------+--------+---------+
+4 rows in set (0.00 sec)
