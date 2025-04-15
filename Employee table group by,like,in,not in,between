@@ -1,0 +1,241 @@
+mysql> create database Company;
+mysql> use Company;
+mysql> create table EmployeeDetails(EmployeeId int primary key,EmployeeName varchar(50) not null,Dept_Id int not null,Salary decimal(10,2) not null);
+mysql> insert into EmployeeDetails(EmployeeId,EmployeeName,Dept_Id,Salary) values
+    -> (1000,'Mani',1,70000),
+    -> (1001,'Bala',1,80000),
+    -> (1003,'Bavan',2,65000),
+    -> (1006,'Divi',3,40000),
+    -> (1002,'Raghav',3,78000),
+    -> (1005,'Navi',1,59000),
+    -> (1007,'Dharsh',2,70000),
+    -> (1004,'Sri',3,60000);
+    
+//EMPLOYEE TABLE
+================
+mysql> select * from EmployeeDetails;
++------------+--------------+---------+----------+
+| EmployeeId | EmployeeName | Dept_Id | Salary   |
++------------+--------------+---------+----------+
+|       1000 | Mani         |       1 | 70000.00 |
+|       1001 | Bala         |       1 | 80000.00 |
+|       1002 | Raghav       |       3 | 78000.00 |
+|       1003 | Bavan        |       2 | 65000.00 |
+|       1004 | Sri          |       3 | 60000.00 |
+|       1005 | Navi         |       1 | 59000.00 |
+|       1006 | Divi         |       3 | 40000.00 |
+|       1007 | Dharsh       |       2 | 70000.00 |
++------------+--------------+---------+----------+
+
+										GROUP BY
+										========
+
+//GROUP BY USED TO COUNT EMPLOYEE BASED ON DEPT-ID:
+===================================================
+mysql> select Dept_Id,count(*) as EmployeeCount
+    -> from EmployeeDetails
+    -> group by Dept_Id;
++---------+---------------+
+| Dept_Id | EmployeeCount |
++---------+---------------+
+|       1 |             3 |
+|       3 |             3 |
+|       2 |             2 |
++---------+---------------+
+
+
+//GROUP BY USED TO FIND SUM,AVERAGE,MAX,MIN:
+============================================
+mysql> select Dept_Id,
+    -> sum(Salary) as Total_Salary,
+    -> avg(Salary) as Average_Salary,
+    -> max(Salary) as Highest_Salary,
+    -> min(Salary) as Lowest_Salary
+    -> from EmployeeDetails group by Dept_Id;
++---------+--------------+----------------+----------------+---------------+
+| Dept_Id | Total_Salary | Average_Salary | Highest_Salary | Lowest_Salary |
++---------+--------------+----------------+----------------+---------------+
+|       1 |    209000.00 |   69666.666667 |       80000.00 |      59000.00 |
+|       3 |    178000.00 |   59333.333333 |       78000.00 |      40000.00 |
+|       2 |    135000.00 |   67500.000000 |       70000.00 |      65000.00 |
++---------+--------------+----------------+----------------+---------------+
+
+									
+												LIKE OPERATOR:
+												==============
+
+//ENDS WITH I
+=============
+mysql> select * from EmployeeDetails 
+    -> where EmployeeName like '%i';
++------------+--------------+---------+----------+
+| EmployeeId | EmployeeName | Dept_Id | Salary   |
++------------+--------------+---------+----------+
+|       1000 | Mani         |       1 | 70000.00 |
+|       1004 | Sri          |       3 | 60000.00 |
+|       1005 | Navi         |       1 | 59000.00 |
+|       1006 | Divi         |       3 | 40000.00 |
++------------+--------------+---------+----------+
+4 rows in set (0.00 sec)
+
+
+//ENDS WITH A
+=============
+mysql> select * from EmployeeDetails  where EmployeeName like '%a';
++------------+--------------+---------+----------+
+| EmployeeId | EmployeeName | Dept_Id | Salary   |
++------------+--------------+---------+----------+
+|       1001 | Bala         |       1 | 80000.00 |
++------------+--------------+---------+----------+
+1 row in set (0.00 sec)
+
+//STARTS WITH A
+===============
+mysql> select * from EmployeeDetails  where EmployeeName like 'a%';
+Empty set (0.00 sec)
+
+//STARTS WITH A
+===============
+mysql> select * from EmployeeDetails  where EmployeeName like 'd%';
++------------+--------------+---------+----------+
+| EmployeeId | EmployeeName | Dept_Id | Salary   |
++------------+--------------+---------+----------+
+|       1006 | Divi         |       3 | 40000.00 |
+|       1007 | Dharsh       |       2 | 70000.00 |
++------------+--------------+---------+----------+
+2 rows in set (0.00 sec)
+
+//ONLY HAS 2 LETTERS ONE IS D AND OTHER IS ANYCHAR
+==================================================
+mysql> select * from EmployeeDetails  where EmployeeName like 'd_';
+Empty set (0.00 sec)
+
+mysql> select * from EmployeeDetails  where EmployeeName like 'd_%';
++------------+--------------+---------+----------+
+| EmployeeId | EmployeeName | Dept_Id | Salary   |
++------------+--------------+---------+----------+
+|       1006 | Divi         |       3 | 40000.00 |
+|       1007 | Dharsh       |       2 | 70000.00 |
++------------+--------------+---------+----------+
+2 rows in set (0.00 sec)
+
+mysql> select * from EmployeeDetails  where EmployeeName like 'd_%_';
++------------+--------------+---------+----------+
+| EmployeeId | EmployeeName | Dept_Id | Salary   |
++------------+--------------+---------+----------+
+|       1006 | Divi         |       3 | 40000.00 |
+|       1007 | Dharsh       |       2 | 70000.00 |
++------------+--------------+---------+----------+
+2 rows in set (0.00 sec)
+
+//CONTAINS A IN ANYWHERE
+========================
+mysql> select * from EmployeeDetails  where EmployeeName like '%a%';
++------------+--------------+---------+----------+
+| EmployeeId | EmployeeName | Dept_Id | Salary   |
++------------+--------------+---------+----------+
+|       1000 | Mani         |       1 | 70000.00 |
+|       1001 | Bala         |       1 | 80000.00 |
+|       1002 | Raghav       |       3 | 78000.00 |
+|       1003 | Bavan        |       2 | 65000.00 |
+|       1005 | Navi         |       1 | 59000.00 |
+|       1007 | Dharsh       |       2 | 70000.00 |
++------------+--------------+---------+----------+
+
+
+// % RETURNS ALL VALUES:
+========================
+mysql> select * from EmployeeDetails  where EmployeeName like '%';
++------------+--------------+---------+----------+
+| EmployeeId | EmployeeName | Dept_Id | Salary   |
++------------+--------------+---------+----------+
+|       1000 | Mani         |       1 | 70000.00 |
+|       1001 | Bala         |       1 | 80000.00 |
+|       1002 | Raghav       |       3 | 78000.00 |
+|       1003 | Bavan        |       2 | 65000.00 |
+|       1004 | Sri          |       3 | 60000.00 |
+|       1005 | Navi         |       1 | 59000.00 |
+|       1006 | Divi         |       3 | 40000.00 |
+|       1007 | Dharsh       |       2 | 70000.00 |
++------------+--------------+---------+----------+
+8 rows in set (0.00 sec)
+											//IN OPERATOR
+											=============
+//USED TO PICK PARTICULAR VALUES
+================================
+mysql> select * from EmployeeDetails  where Dept_Id in (1,2);
++------------+--------------+---------+----------+
+| EmployeeId | EmployeeName | Dept_Id | Salary   |
++------------+--------------+---------+----------+
+|       1000 | Mani         |       1 | 70000.00 |
+|       1001 | Bala         |       1 | 80000.00 |
+|       1003 | Bavan        |       2 | 65000.00 |
+|       1005 | Navi         |       1 | 59000.00 |
+|       1007 | Dharsh       |       2 | 70000.00 |
++------------+--------------+---------+----------+
+5 rows in set (0.00 sec)
+
+											NOT IN
+											======
+mysql> select * from EmployeeDetails  where Dept_Id not in (1,2);
++------------+--------------+---------+----------+
+| EmployeeId | EmployeeName | Dept_Id | Salary   |
++------------+--------------+---------+----------+
+|       1002 | Raghav       |       3 | 78000.00 |
+|       1004 | Sri          |       3 | 60000.00 |
+|       1006 | Divi         |       3 | 40000.00 |
++------------+--------------+---------+----------+
+3 rows in set (0.00 sec)
+											//BETWEEN
+											=========
+mysql> select * from EmployeeDetails  where Salary between 70000 and 80000;
++------------+--------------+---------+----------+
+| EmployeeId | EmployeeName | Dept_Id | Salary   |
++------------+--------------+---------+----------+
+|       1000 | Mani         |       1 | 70000.00 |
+|       1001 | Bala         |       1 | 80000.00 |
+|       1002 | Raghav       |       3 | 78000.00 |
+|       1007 | Dharsh       |       2 | 70000.00 |
++------------+--------------+---------+----------+
+
+											//LIMIT
+											=======
+
+mysql> select * from EmployeeDetails
+    -> where Dept_Id=1 
+    -> limit 1;
++------------+--------------+---------+----------+
+| EmployeeId | EmployeeName | Dept_Id | Salary   |
++------------+--------------+---------+----------+
+|       1000 | Mani         |       1 | 70000.00 |
++------------+--------------+---------+----------+
+
+											//ORDER BY SALARY
+											=================
+mysql> select * from EmployeeDetails
+    -> order by Salary desc;
++------------+--------------+---------+----------+
+| EmployeeId | EmployeeName | Dept_Id | Salary   |
++------------+--------------+---------+----------+
+|       1001 | Bala         |       1 | 80000.00 |
+|       1002 | Raghav       |       3 | 78000.00 |
+|       1000 | Mani         |       1 | 70000.00 |
+|       1007 | Dharsh       |       2 | 70000.00 |
+|       1003 | Bavan        |       2 | 65000.00 |
+|       1004 | Sri          |       3 | 60000.00 |
+|       1005 | Navi         |       1 | 59000.00 |
+|       1006 | Divi         |       3 | 40000.00 |
++------------+--------------+---------+----------+
+8 rows in set (0.00 sec)
+
+											//LIMIT WITH OFFSET TO FIND 3RD MAX SALARY
+											==========================================
+mysql> select * from EmployeeDetails order by Salary desc
+    -> limit 1 offset 2;
++------------+--------------+---------+----------+
+| EmployeeId | EmployeeName | Dept_Id | Salary   |
++------------+--------------+---------+----------+
+|       1007 | Dharsh       |       2 | 70000.00 |
++------------+--------------+---------+----------+
+1 row in set (0.00 sec)
+
