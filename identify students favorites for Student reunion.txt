@@ -1,0 +1,572 @@
+mysql> create database Students_Reunion;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use Students_Reunion;
+Database changed
+mysql> create table Students(
+    -> Student_Id int auto_increment primary key,
+    -> Name varchar(70) not null,
+    -> gender enum('Female','Male','Other'),
+    -> Contact_No varchar(12) );
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> create table Geners(
+    -> Gener_Id int auto increment primary key,
+    -> Gener_Name varchar(60) not null );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'auto increment primary key,
+Gener_Name varchar(60) not null )' at line 2
+mysql> create table Geners(
+    -> Gener_Id int auto_increment primary key,
+    -> Gener_Name varchar(60) not null );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> create table Shopping_Malls(
+    -> Mall_Id int auto_increment primary Key,
+    -> Mall_Name varchar(60) not null,
+    -> Location varchar(50) );
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> create table Beaches(
+    -> Beach_Id int auto_increment primary key,
+    -> Beach_Name varchar(60) not null,
+    -> Location varchar(60) );
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> create table student_favorite_genre(
+    -> Student_Id int,
+    -> Gener_Id int,
+    -> primary key(Student_Id,Gener_Id),
+    -> foreign key (Student_Id) references Students(Student_Id),
+    -> foreign key (Gener_Id) references Geners(Gener_Id) );
+Query OK, 0 rows affected (0.09 sec)
+
+
+mysql> create table Movies(
+    -> Movie_Id int auto_increment primary key,
+    -> Movie_Name varchar(60) not null,
+    -> Hero_Name varchar(50),
+    -> Heroine_Name varchar(50) );
+Query OK, 0 rows affected (0.06 sec)
+
+
+mysql> create table student_favorite_actor_actress(
+    -> Student_Id int primary key,
+    -> Favorite_Actor varchar(50),
+    -> Favorite_Actress varchar(50),
+    -> foreign key (Student_Id) references Students(Student_Id) );
+Query OK, 0 rows affected (0.06 sec)
+
+
+mysql> create table student_favorite_Mall(
+    -> Student_Id int,
+    -> Mall_Id int,
+    -> primary key(Student_Id,Mall_Id),
+    -> foreign key(Student_Id) references Students(Student_Id),
+    -> foreign key(Mall_Id) references Shopping_Malls(Mall_Id) );
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> create table student_favorite_beach(
+    -> Student_Id int,
+    -> Beach_Id int,
+    -> primary key(Student_Id,Beach_Id),
+    -> foreign key(Student_Id) references Students(Student_Id),
+    -> foreign key(Beach_Id) references Beaches(Beach_Id) );
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> create table student_favorite_movie(
+    -> Student_Id int,
+    -> Movie_Id int,
+    -> primary key(Student_Id,Movie_Id),
+    -> foreign key(Student_Id) references Students(Student_Id),
+    -> foreign key(Movie_Id) references Movies(Movie_Id) );
+Query OK, 0 rows affected (0.09 sec)
+
+
+mysql> show tables;
++--------------------------------+
+| Tables_in_students_reunion     |
++--------------------------------+
+| beaches                        |
+| geners                         |
+| movies                         |
+| shopping_malls                 |
+| student_favorite_actor_actress |
+| student_favorite_beach         |
+| student_favorite_genre         |
+| student_favorite_mall          |
+| student_favorite_movie         |
+| students                       |
++--------------------------------+
+10 rows in set (0.00 sec)
+
+mysql> insert into Students(Name,gender,Contact_No) values
+    -> ('Mani','Female','8736457281'),
+    -> ('Dharshi','Female','6788198912'),
+    -> ('Muthu','Male','7438834992'),
+    -> ('Srinithi','Female','647781911'),
+    -> ('Ram','Other','8982387190'),
+    -> ('Aathi','Male','737875868'),
+    -> ('Nithi','Female','738458921'),
+    -> ('Karthi','Male','9847589690'),
+    -> ('Sanju','Male','5785479829'),
+    -> ('Krithi','Female','8489577234');
+Query OK, 10 rows affected (0.01 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+
+mysql> select * from Students;
++------------+----------+--------+------------+
+| Student_Id | Name     | gender | Contact_No |
++------------+----------+--------+------------+
+|          1 | Mani     | Female | 8736457281 |
+|          2 | Dharshi  | Female | 6788198912 |
+|          3 | Muthu    | Male   | 7438834992 |
+|          4 | Srinithi | Female | 647781911  |
+|          5 | Ram      | Other  | 8982387190 |
+|          6 | Aathi    | Male   | 737875868  |
+|          7 | Nithi    | Female | 738458921  |
+|          8 | Karthi   | Male   | 9847589690 |
+|          9 | Sanju    | Male   | 5785479829 |
+|         10 | Krithi   | Female | 8489577234 |
++------------+----------+--------+------------+
+
+
+mysql> insert into Geners(Gener_Name) values
+    -> ('Action'),
+    -> ('Comedy'),
+    -> ('Romance'),
+    -> ('Thriller');
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from Geners;
++----------+------------+
+| Gener_Id | Gener_Name |
++----------+------------+
+|        1 | Action     |
+|        2 | Comedy     |
+|        3 | Romance    |
+|        4 | Thriller   |
++----------+------------+
+
+mysql> insert into Shopping_Malls(Mall_Name,Location) values
+    -> ('VR Mall','Chennai'),
+    -> ('Phoenix Mall','Velacherry'),
+    -> ('Skywalk mall','T.Nagar'),
+    -> ('Chennai city center','Chennai'),
+    -> ('Spencer Plaza','Thambaram');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from Shopping_malls;
++---------+---------------------+------------+
+| Mall_Id | Mall_Name           | Location   |
++---------+---------------------+------------+
+|       1 | VR Mall             | Chennai    |
+|       2 | Phoenix Mall        | Velacherry |
+|       3 | Skywalk mall        | T.Nagar    |
+|       4 | Chennai city center | Chennai    |
+|       5 | Spencer Plaza       | Thambaram  |
++---------+---------------------+------------+
+5 rows in set (0.00 sec)
+
+mysql> insert into Beaches(Beach_Name,Location) values
+    -> ('Besant Nagar Beach','Besent Nagar'),
+    -> ('Thiruvanmiyut Beach','Thiruvsnmiyur'),
+    -> ('Marina Beach','Triplicane'),
+    -> ('Kottivakkam Beach','Kottivakkam'),
+    -> ('Palavakkam Beach','Palavakkam');
+Query OK, 5 rows affected (0.02 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from Beaches;
++----------+---------------------+---------------+
+| Beach_Id | Beach_Name          | Location      |
++----------+---------------------+---------------+
+|        1 | Besant Nagar Beach  | Besent Nagar  |
+|        2 | Thiruvanmiyut Beach | Thiruvsnmiyur |
+|        3 | Marina Beach        | Triplicane    |
+|        4 | Kottivakkam Beach   | Kottivakkam   |
+|        5 | Palavakkam Beach    | Palavakkam    |
++----------+---------------------+---------------+
+5 rows in set (0.00 sec)
+
+
+mysql> insert into student_favorite_genre(Student_Id,Gener_Id) values
+    -> (1,2),
+    -> (1,3),
+    -> (2,1)
+    -> ;
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> insert into student_favorite_genre(Student_Id,Gener_Id) values
+    -> (2,4),(3,2),(3,1),(4,1),(5,2),(5,1),(6,2),(6,4),(7,4),(8,1),(8,3),(9,4),(10,1),(10,2),(10,4);
+Query OK, 15 rows affected (0.01 sec)
+Records: 15  Duplicates: 0  Warnings: 0
+
+mysql> select * from student_favorite_genre;
++------------+----------+
+| Student_Id | Gener_Id |
++------------+----------+
+|          2 |        1 |
+|          3 |        1 |
+|          4 |        1 |
+|          5 |        1 |
+|          8 |        1 |
+|         10 |        1 |
+|          1 |        2 |
+|          3 |        2 |
+|          5 |        2 |
+|          6 |        2 |
+|         10 |        2 |
+|          1 |        3 |
+|          8 |        3 |
+|          2 |        4 |
+|          6 |        4 |
+|          7 |        4 |
+|          9 |        4 |
+|         10 |        4 |
++------------+----------+
+
+
+mysql> insert into Movies(Movie_Name,Hero_Name,Heroine_Name) values
+    -> ('Sachin','Vijay','Jenelia'),
+    -> ('Sarvam','Arya','Trisha'),
+    -> ('PS-2','Karthi','Trisha'),
+    -> ('Raja Rani','Jei','Nazriya'),
+    -> ('velaikaran','SK','Nayanthara');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from Movies;
++----------+------------+-----------+--------------+
+| Movie_Id | Movie_Name | Hero_Name | Heroine_Name |
++----------+------------+-----------+--------------+
+|        1 | Sachin     | Vijay     | Jenelia      |
+|        2 | Sarvam     | Arya      | Trisha       |
+|        3 | PS-2       | Karthi    | Trisha       |
+|        4 | Raja Rani  | Jei       | Nazriya      |
+|        5 | velaikaran | SK        | Nayanthara   |
++----------+------------+-----------+--------------+
+5 rows in set (0.00 sec)
+
+
+
+mysql> insert into student_favorite_actor_actress(Student_Id,Favorite_Actor,Favorite_Actress) values
+    -> (1,'Surya','Nazriya'),
+    -> (2,'Ajith','Trisha'),
+    -> (3,'Vijay','Samantha'),
+    -> (4,'SK','Jenelia'),
+    -> (5,'Arya','Sri divya'),
+    -> (6,'Adharva','Nayanthara'),
+    -> (7,'Kamal','Trisha'),
+    -> (8,Null,'Nazriya'),
+    -> (9,'Karthi',Null),
+    -> (10,'Jei','Samantha');
+Query OK, 10 rows affected (0.01 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> select * from student_favorite_actor_actress;
++------------+----------------+------------------+
+| Student_Id | Favorite_Actor | Favorite_Actress |
++------------+----------------+------------------+
+|          1 | Surya          | Nazriya          |
+|          2 | Ajith          | Trisha           |
+|          3 | Vijay          | Samantha         |
+|          4 | SK             | Jenelia          |
+|          5 | Arya           | Sri divya        |
+|          6 | Adharva        | Nayanthara       |
+|          7 | Kamal          | Trisha           |
+|          8 | NULL           | Nazriya          |
+|          9 | Karthi         | NULL             |
+|         10 | Jei            | Samantha         |
++------------+----------------+------------------+
+
+
+mysql> insert into student_favorite_Mall(Student_Id,Mall_Id) values
+    -> (1,2),(1,5),(2,3),(3,1),(4,2),(4,4),(5,1),(6,5),(7,3),(8,2),(9,4),(10,2),(10,1);
+Query OK, 13 rows affected (0.02 sec)
+Records: 13  Duplicates: 0  Warnings: 0
+
+mysql> select * from student_favorite_mall;
++------------+---------+
+| Student_Id | Mall_Id |
++------------+---------+
+|          3 |       1 |
+|          5 |       1 |
+|         10 |       1 |
+|          1 |       2 |
+|          4 |       2 |
+|          8 |       2 |
+|         10 |       2 |
+|          2 |       3 |
+|          7 |       3 |
+|          4 |       4 |
+|          9 |       4 |
+|          1 |       5 |
+|          6 |       5 |
++------------+---------+
+13 rows in set (0.00 sec)
+
+
+
+mysql> insert into student_favorite_beach(Student_Id,Beach_Id) values
+    -> (1,2),(2,3),(2,5),(3,1),(4,5),(4,2),(5,3),(6,5),(7,2),(8,2),(9,3),(10,5),(10,2);
+Query OK, 13 rows affected (0.01 sec)
+Records: 13  Duplicates: 0  Warnings: 0
+
+mysql> select * from student_favorite_beach;
++------------+----------+
+| Student_Id | Beach_Id |
++------------+----------+
+|          3 |        1 |
+|          1 |        2 |
+|          4 |        2 |
+|          7 |        2 |
+|          8 |        2 |
+|         10 |        2 |
+|          2 |        3 |
+|          5 |        3 |
+|          9 |        3 |
+|          2 |        5 |
+|          4 |        5 |
+|          6 |        5 |
+|         10 |        5 |
++------------+----------+
+13 rows in set (0.00 sec)
+
+mysql> insert into student_favorite_movie(Student_Id,Movie_Id) values
+    -> (1,2),(2,3),(2,1),(3,5),(4,1),(4,3),(5,2),(5,1),(6,4),(7,1),(7,4),(8,2),(9,3),(9,5),(10,2);
+Query OK, 15 rows affected (0.01 sec)
+Records: 15  Duplicates: 0  Warnings: 0
+
+mysql> select * from student_favorite_movie;
++------------+----------+
+| Student_Id | Movie_Id |
++------------+----------+
+|          2 |        1 |
+|          4 |        1 |
+|          5 |        1 |
+|          7 |        1 |
+|          1 |        2 |
+|          5 |        2 |
+|          8 |        2 |
+|         10 |        2 |
+|          2 |        3 |
+|          4 |        3 |
+|          9 |        3 |
+|          6 |        4 |
+|          7 |        4 |
+|          3 |        5 |
+|          9 |        5 |
++------------+----------+
+15 rows in set (0.00 sec)
+
+			//SELECT FEMALE STUDENTS
+			========================
+
+mysql> select * from Students where gender='Female';
++------------+----------+--------+------------+
+| Student_Id | Name     | gender | Contact_No |
++------------+----------+--------+------------+
+|          1 | Mani     | Female | 8736457281 |
+|          2 | Dharshi  | Female | 6788198912 |
+|          4 | Srinithi | Female | 647781911  |
+|          7 | Nithi    | Female | 738458921  |
+|         10 | Krithi   | Female | 8489577234 |
++------------+----------+--------+------------+
+5 rows in set (0.00 sec)
+
+					TO VIEW STUDENTS FAVORITE MOVIE GENRE
+					=====================================
+mysql> select s.Name,g.Gener_Name as Favt_gener
+    -> from Students s
+    -> join student_favorite_genre sg on s.Student_Id=sg.Student_Id
+    -> join Geners g on sg.Gener_Id=g.Gener_Id;
++----------+------------+
+| Name     | Favt_gener |
++----------+------------+
+| Dharshi  | Action     |
+| Muthu    | Action     |
+| Srinithi | Action     |
+| Ram      | Action     |
+| Karthi   | Action     |
+| Krithi   | Action     |
+| Mani     | Comedy     |
+| Muthu    | Comedy     |
+| Ram      | Comedy     |
+| Aathi    | Comedy     |
+| Krithi   | Comedy     |
+| Mani     | Romance    |
+| Karthi   | Romance    |
+| Dharshi  | Thriller   |
+| Aathi    | Thriller   |
+| Nithi    | Thriller   |
+| Sanju    | Thriller   |
+| Krithi   | Thriller   |
++----------+------------+
+18 rows in set (0.00 sec)
+
+			//TO VIEW STUDENTS INTRESTED IN PARTICULAR GENRE
+			================================================
+
+mysql> select s.Name,g.Gener_Name as Comedy_Genres
+    -> from Students s
+    -> join student_favorite_genre sg on s.Student_Id=sg.Student_Id
+    -> join Geners g on sg.Gener_Id=g.Gener_Id
+    -> where g.gener_name='Comedy';
++--------+---------------+
+| Name   | Comedy_Genres |
++--------+---------------+
+| Mani   | Comedy        |
+| Muthu  | Comedy        |
+| Ram    | Comedy        |
+| Aathi  | Comedy        |
+| Krithi | Comedy        |
++--------+---------------+
+
+				//TO VIEW STUDENTS FAVORITE ACTOR,ACTRESS
+				=========================================
+
+
+mysql> select s.name,sa.favorite_actor,sa.favorite_actress
+    -> from Students s
+    -> join student_favorite_actor_actress sa on s.Student_Id=sa.Student_Id;
++----------+----------------+------------------+
+| name     | favorite_actor | favorite_actress |
++----------+----------------+------------------+
+| Mani     | Surya          | Nazriya          |
+| Dharshi  | Ajith          | Trisha           |
+| Muthu    | Vijay          | Samantha         |
+| Srinithi | SK             | Jenelia          |
+| Ram      | Arya           | Sri divya        |
+| Aathi    | Adharva        | Nayanthara       |
+| Nithi    | Kamal          | Trisha           |
+| Karthi   | NULL           | Nazriya          |
+| Sanju    | Karthi         | NULL             |
+| Krithi   | Jei            | Samantha         |
++----------+----------------+------------------+
+
+					//STUDENTS FAVT MALLS
+					=====================
+
+mysql> select s.name,m.Mall_Name, m.Location
+    -> from Students s
+    -> join student_favorite_mall sm on s.Student_Id=sm.Student_Id
+    -> join Shopping_Malls m on sm.Mall_Id=m.Mall_Id;
++----------+---------------------+------------+
+| name     | Mall_Name           | Location   |
++----------+---------------------+------------+
+| Muthu    | VR Mall             | Chennai    |
+| Ram      | VR Mall             | Chennai    |
+| Krithi   | VR Mall             | Chennai    |
+| Mani     | Phoenix Mall        | Velacherry |
+| Srinithi | Phoenix Mall        | Velacherry |
+| Karthi   | Phoenix Mall        | Velacherry |
+| Krithi   | Phoenix Mall        | Velacherry |
+| Dharshi  | Skywalk mall        | T.Nagar    |
+| Nithi    | Skywalk mall        | T.Nagar    |
+| Srinithi | Chennai city center | Chennai    |
+| Sanju    | Chennai city center | Chennai    |
+| Mani     | Spencer Plaza       | Thambaram  |
+| Aathi    | Spencer Plaza       | Thambaram  |
++----------+---------------------+------------+
+13 rows in set (0.00 sec)
+
+				//WHICH MALL LIKED BY HOWMANY STUDENTS
+				======================================
+
+mysql> select mall_id, count(*) as student_count
+    -> from student_favorite_mall
+    -> group by Mall_id
+    -> having count(*) > 1;
++---------+---------------+
+| mall_id | student_count |
++---------+---------------+
+|       1 |             3 |
+|       2 |             4 |
+|       3 |             2 |
+|       4 |             2 |
+|       5 |             2 |
++---------+---------------+
+5 rows in set (0.00 sec)
+
+
+				//TO VIEW STUDENTS FAVORITE BEACHES
+				===================================
+
+mysql> select s.Name,b.beach_name,location
+    -> from students s
+    -> join student_favorite_beach sb on s.student_id=sb.student_id
+    -> join Beaches b on sb.beach_id=b.beach_id;
++----------+---------------------+---------------+
+| Name     | beach_name          | location      |
++----------+---------------------+---------------+
+| Muthu    | Besant Nagar Beach  | Besent Nagar  |
+| Mani     | Thiruvanmiyut Beach | Thiruvsnmiyur |
+| Srinithi | Thiruvanmiyut Beach | Thiruvsnmiyur |
+| Nithi    | Thiruvanmiyut Beach | Thiruvsnmiyur |
+| Karthi   | Thiruvanmiyut Beach | Thiruvsnmiyur |
+| Krithi   | Thiruvanmiyut Beach | Thiruvsnmiyur |
+| Dharshi  | Marina Beach        | Triplicane    |
+| Ram      | Marina Beach        | Triplicane    |
+| Sanju    | Marina Beach        | Triplicane    |
+| Dharshi  | Palavakkam Beach    | Palavakkam    |
+| Srinithi | Palavakkam Beach    | Palavakkam    |
+| Aathi    | Palavakkam Beach    | Palavakkam    |
+| Krithi   | Palavakkam Beach    | Palavakkam    |
++----------+---------------------+---------------+
+
+				//STUDENTS WHOSE LIKE PARTICULAR BEACH
+				======================================
+
+mysql> select s.Name,b.beach_name,location
+    -> from students s
+    -> join student_favorite_beach sb on s.student_id=sb.student_id
+    -> join Beaches b on sb.beach_id=b.beach_id
+    -> where b.beach_name="Palavakkam Beach";
++----------+------------------+------------+
+| Name     | beach_name       | location   |
++----------+------------------+------------+
+| Dharshi  | Palavakkam Beach | Palavakkam |
+| Srinithi | Palavakkam Beach | Palavakkam |
+| Aathi    | Palavakkam Beach | Palavakkam |
+| Krithi   | Palavakkam Beach | Palavakkam |
++----------+------------------+------------+
+4 rows in set (0.00 sec)
+
+
+					//THE STUDENT FAVORITE MOVIE HAS HIS FAVORITE ACTOR
+					===================================================
+mysql> select s.name,m.movie_name,f.favorite_actor
+    -> from students s
+    -> join student_favorite_movie sm on s.student_id=sm.student_id
+    -> join movies m on sm.movie_id=m.movie_id
+    -> join student_favorite_actor_actress f on s.student_id=f.student_id
+    -> where m.hero_name=f.favorite_actor;
++-------+------------+----------------+
+| name  | movie_name | favorite_actor |
++-------+------------+----------------+
+| Ram   | Sarvam     | Arya           |
+| Sanju | PS-2       | Karthi         |
++-------+------------+----------------+
+2 rows in set (0.00 sec)
+
+
+					//THE STUDENT FAVORITE MOVIE HAS HIS FAVORITE ACTRESS
+					=====================================================
+
+mysql> select s.name,m.movie_name,f.favorite_actress
+    -> from students s
+    -> join student_favorite_movie sm on s.student_id=sm.student_id
+    -> join movies m on sm.movie_id=m.movie_id
+    -> join student_favorite_actor_actress f on s.student_id=f.student_id
+    -> where m.heroine_name=f.favorite_actress;
++----------+------------+------------------+
+| name     | movie_name | favorite_actress |
++----------+------------+------------------+
+| Srinithi | Sachin     | Jenelia          |
+| Dharshi  | PS-2       | Trisha           |
++----------+------------+------------------+
+2 rows in set (0.00 sec)

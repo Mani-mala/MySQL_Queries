@@ -1,0 +1,147 @@
+mysql> create database CricketTeam;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use database cricketteam;
+ERROR 1049 (42000): Unknown database 'database'
+mysql> use database CricketTeam;
+ERROR 1049 (42000): Unknown database 'database'
+mysql> use Cricketteam;
+Database changed
+mysql> create table PlayersList(Player_Id varchar(7) primary key,Player_Name varchar(50) not null,Caption_Id varchar(7) default Null);
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> insert into PlayerList(Player_Id,Player_Name,Caption_Id) values
+    -> ('I 18','Virat kohli');
+ERROR 1146 (42S02): Table 'cricketteam.playerlist' doesn't exist
+mysql> insert into PlayerList(Player_Id,Player_Name,Caption_Id) values
+    -> ('I 18','Virat kohli','null');
+ERROR 1146 (42S02): Table 'cricketteam.playerlist' doesn't exist
+mysql> insert into PlayersList(Player_Id,Player_Name,Caption_Id) values
+    -> ('I 18','Virat kohli');
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into PlayersList(Player_Id,Player_Name,Caption_Id) values
+    -> ('I 18','Virat kohli',Null);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into PlayersList(Player_Id,Player_Name,Caption_Id) values
+    -> ('I 20'.'AShwin','I 18'),
+    -> ('I 20'.'AShwin','I 18');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '.'AShwin','I 18'),
+('I 20'.'AShwin','I 18')' at line 2
+mysql> insert into PlayersList(Player_Id,Player_Name,Caption_Id) values
+    -> ('I 20','Ashwin','I 18'),
+    -> ('I 07','Dhoni',Null),
+    -> ('I 32','Mohammed Siraj','I 18'),
+    -> ('I 37','Padikkal','I 18'),
+    -> ('I 50','Ruthraj','I 07'),
+    -> ('I 40','Jadeja','I 07'),
+    -> ('A 20','Cummins','A 42'),
+    -> ('A 42','David Warner',Null),
+    -> ('I 28','Yuvaraj','I 07'),
+    -> ('A 37','Smith','A 42'),
+    -> ('I 100','Deepthi Sharma','I 200'),
+    -> ('I 200','Smirthi Manthana',Null),
+    -> ('I 300','Pooja','I 200');
+Query OK, 13 rows affected (0.01 sec)
+Records: 13  Duplicates: 0  Warnings: 0
+
+mysql> select * from PlayersList;
++-----------+------------------+------------+
+| Player_Id | Player_Name      | Caption_Id |
++-----------+------------------+------------+
+| A 20      | Cummins          | A 42       |
+| A 37      | Smith            | A 42       |
+| A 42      | David Warner     | NULL       |
+| I 07      | Dhoni            | NULL       |
+| I 100     | Deepthi Sharma   | I 200      |
+| I 18      | Virat kohli      | NULL       |
+| I 20      | Ashwin           | I 18       |
+| I 200     | Smirthi Manthana | NULL       |
+| I 28      | Yuvaraj          | I 07       |
+| I 300     | Pooja            | I 200      |
+| I 32      | Mohammed Siraj   | I 18       |
+| I 37      | Padikkal         | I 18       |
+| I 40      | Jadeja           | I 07       |
+| I 50      | Ruthraj          | I 07       |
++-----------+------------------+------------+
+14 rows in set (0.00 sec)
+
+mysql> select P.Player_Id as Player_Id,
+    -> P.Player_Name as Player_Name,
+    -> P.Caption_Id as Caption_Id,
+    -> C.Player_Name as Caption_Name
+    -> from PlayersList P
+    -> join PlayersList C
+    -> on P.Caption_Id=C.Player_Id;
++-----------+----------------+------------+------------------+
+| Player_Id | Player_Name    | Caption_Id | Caption_Name     |
++-----------+----------------+------------+------------------+
+| A 20      | Cummins        | A 42       | David Warner     |
+| A 37      | Smith          | A 42       | David Warner     |
+| I 100     | Deepthi Sharma | I 200      | Smirthi Manthana |
+| I 20      | Ashwin         | I 18       | Virat kohli      |
+| I 28      | Yuvaraj        | I 07       | Dhoni            |
+| I 300     | Pooja          | I 200      | Smirthi Manthana |
+| I 32      | Mohammed Siraj | I 18       | Virat kohli      |
+| I 37      | Padikkal       | I 18       | Virat kohli      |
+| I 40      | Jadeja         | I 07       | Dhoni            |
+| I 50      | Ruthraj        | I 07       | Dhoni            |
++-----------+----------------+------------+------------------+
+10 rows in set (0.00 sec)
+
+mysql> select * from PlayersList where Caption_Id=Null;
+Empty set (0.00 sec)
+
+mysql> select * from PlayersList where Caption_Id Null;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Null' at line 1
+mysql> select * from PlayersList where Caption_Id='Null';
+Empty set (0.00 sec)
+
+mysql> select * from PlayersList where Caption_Id is Null;
++-----------+------------------+------------+
+| Player_Id | Player_Name      | Caption_Id |
++-----------+------------------+------------+
+| A 42      | David Warner     | NULL       |
+| I 07      | Dhoni            | NULL       |
+| I 18      | Virat kohli      | NULL       |
+| I 200     | Smirthi Manthana | NULL       |
++-----------+------------------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select P.Player_Id as Player_Id,
+    -> P.Player_Name as Player_Name,
+    -> P.Caption_Id as Caption_Id,
+    -> C.Player_Name as Caption_Name
+    -> from PlayersList P
+    -> left join PlayersList C
+    -> on P.Caption_Id=C.Player_Id;
++-----------+------------------+------------+------------------+
+| Player_Id | Player_Name      | Caption_Id | Caption_Name     |
++-----------+------------------+------------+------------------+
+| A 20      | Cummins          | A 42       | David Warner     |
+| A 37      | Smith            | A 42       | David Warner     |
+| A 42      | David Warner     | NULL       | NULL             |
+| I 07      | Dhoni            | NULL       | NULL             |
+| I 100     | Deepthi Sharma   | I 200      | Smirthi Manthana |
+| I 18      | Virat kohli      | NULL       | NULL             |
+| I 20      | Ashwin           | I 18       | Virat kohli      |
+| I 200     | Smirthi Manthana | NULL       | NULL             |
+| I 28      | Yuvaraj          | I 07       | Dhoni            |
+| I 300     | Pooja            | I 200      | Smirthi Manthana |
+| I 32      | Mohammed Siraj   | I 18       | Virat kohli      |
+| I 37      | Padikkal         | I 18       | Virat kohli      |
+| I 40      | Jadeja           | I 07       | Dhoni            |
+| I 50      | Ruthraj          | I 07       | Dhoni            |
++-----------+------------------+------------+------------------+
+14 rows in set (0.00 sec)
+
+
+mysql> Select Player_Name,Player_Id from PlayersList where Caption_Id='I 18';
++----------------+-----------+
+| Player_Name    | Player_Id |
++----------------+-----------+
+| Ashwin         | I 20      |
+| Mohammed Siraj | I 32      |
+| Padikkal       | I 37      |
++----------------+-----------+
+3 rows in set (0.00 sec)
