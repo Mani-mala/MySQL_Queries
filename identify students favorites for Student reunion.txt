@@ -570,3 +570,171 @@ mysql> select s.name,m.movie_name,f.favorite_actress
 | Dharshi  | PS-2       | Trisha           |
 +----------+------------+------------------+
 2 rows in set (0.00 sec)
+
+				//STUDENTS WHO LIKES ROMANCE GENRE
+				==================================
+	
+mysql> select g.gener_name, group_concat(s.Name) as Students_who_likes_it
+    -> from students s
+    -> join student_favorite_genre sg on s.Student_Id=sg.Student_Id
+    -> join Geners g on sg.Gener_Id=g.Gener_Id
+    -> where g.gener_name='Romance';
++------------+-----------------------+
+| gener_name | Students_who_likes_it |
++------------+-----------------------+
+| Romance    | Mani,Karthi           |
++------------+-----------------------+
+1 row in set (0.01 sec)
+
+				//STUDENTS WHO LIKES THRILLER GENRE
+				===================================
+
+mysql> select g.gener_name, group_concat(s.Name) as Students_who_likes_it
+    -> from students s
+    -> join student_favorite_genre sg on s.Student_Id=sg.Student_Id
+    ->  join Geners g on sg.Gener_Id=g.Gener_Id
+    -> where g.gener_name='Thriller';
++------------+----------------------------------+
+| gener_name | Students_who_likes_it            |
++------------+----------------------------------+
+| Thriller   | Dharshi,Aathi,Nithi,Sanju,Krithi |
++------------+----------------------------------+
+1 row in set (0.00 sec)
+
+				//GROUP STUDENTS BY FAVT ACTORS
+				===============================
+
+mysql> select fa.favorite_actor, group_concat(s.Name) as fans_list
+    -> from student_favorite_actor_actress fa
+    -> join students s on fa.student_id=s.student_id
+    -> group by fa.favorite_actor;
++----------------+-----------+
+| favorite_actor | fans_list |
++----------------+-----------+
+| NULL           | Karthi    |
+| Adharva        | Aathi     |
+| Ajith          | Dharshi   |
+| Arya           | Ram       |
+| Jei            | Krithi    |
+| Kamal          | Nithi     |
+| Karthi         | Sanju     |
+| SK             | Srinithi  |
+| Surya          | Mani      |
+| Vijay          | Muthu     |
++----------------+-----------+
+10 rows in set (0.00 sec)
+
+				//GROUP STUDENTS BY FAVT BEACHES
+				================================
+
+mysql> select b.beach_name, group_concat(s.Name) as Beach_bookies
+    -> from student_favorite_beach fb
+    -> join beaches b on fb.beach_id=b.beach_id
+    -> join students s on fb.student_id=s.student_id
+    -> group by b.beach_name;
++---------------------+-----------------------------------+
+| beach_name          | Beach_bookies                     |
++---------------------+-----------------------------------+
+| Besant Nagar Beach  | Muthu                             |
+| Marina Beach        | Dharshi,Ram,Sanju                 |
+| Palavakkam Beach    | Dharshi,Srinithi,Aathi,Krithi     |
+| Thiruvanmiyut Beach | Mani,Srinithi,Nithi,Karthi,Krithi |
++---------------------+-----------------------------------+
+4 rows in set (0.00 sec)
+
+				//GROUP STUDENTS BY FAVT MALLS
+				==============================
+
+mysql> select m.mall_name, group_concat(s.Name) as mall_roamers
+    -> from student_favorite_mall fm
+    -> join shopping_malls m on fm.mall_id=m.mall_id
+    -> join students s on fm.student_id=s.student_id
+    -> group by m.mall_name;
++---------------------+-----------------------------+
+| mall_name           | mall_roamers                |
++---------------------+-----------------------------+
+| Chennai city center | Srinithi,Sanju              |
+| Phoenix Mall        | Mani,Srinithi,Karthi,Krithi |
+| Skywalk mall        | Dharshi,Nithi               |
+| Spencer Plaza       | Mani,Aathi                  |
+| VR Mall             | Muthu,Ram,Krithi            |
++---------------------+-----------------------------+
+5 rows in set (0.00 sec)
+
+				//GROUP STUDENT BY FAVT MOVIE
+				=============================
+
+mysql> select m.movie_name, group_concat(s.name) as Movie_gang
+    -> from student_favorite_movie sm
+    -> join movies m on sm.movie_id=m.movie_id
+    -> join students s on sm.student_id=s.student_id
+    -> group by m.movie_name;
++------------+----------------------------+
+| movie_name | Movie_gang                 |
++------------+----------------------------+
+| PS-2       | Dharshi,Srinithi,Sanju     |
+| Raja Rani  | Aathi,Nithi                |
+| Sachin     | Dharshi,Srinithi,Ram,Nithi |
+| Sarvam     | Mani,Ram,Karthi,Krithi     |
+| velaikaran | Muthu,Sanju                |
++------------+----------------------------+
+
+					//MOST LIKED ACTRESS
+					====================
+
+
+mysql> select favorite_actress, count(*) as Most_liked_actress
+    -> from student_favorite_actor_actress
+    -> group by favorite_actress
+    -> order by Most_liked_actress desc
+    -> limit 1;
++------------------+--------------------+
+| favorite_actress | Most_liked_actress |
++------------------+--------------------+
+| Nazriya          |                  2 |
++------------------+--------------------+
+
+					//MOST LIKED GENRE
+					==================
+
+mysql> select g.gener_name, count(*) as favt_gener_count
+    -> from student_favorite_genre fg
+    -> join geners g on fg.gener_id=g.gener_id
+    -> group by g.gener_name
+    -> order by favt_gener_count desc
+    -> limit 1;
++------------+------------------+
+| gener_name | favt_gener_count |
++------------+------------------+
+| Action     |                6 |
++------------+------------------+
+
+					//MOST LIKED BEACH
+					==================
+
+mysql> select b.beach_name, count(*) as favt_beach
+    -> from student_favorite_beach fb
+    -> join beaches b on fb.beach_id=b.beach_id
+    -> group by b.beach_name
+    -> order by favt_beach desc
+    -> limit 1;
++---------------------+------------+
+| beach_name          | favt_beach |
++---------------------+------------+
+| Thiruvanmiyut Beach |          5 |
++---------------------+------------+
+
+				// WHICH MOVIE CAN MOST PEOPLE AGREE ON WATCHING TOGETHER
+				=========================================================
+
+mysql> select m.movie_name as Most_liked_movie, count(*) as liked_by
+    -> from student_favorite_movie sm
+    -> join movies m on sm.movie_id=m.movie_id
+    -> group by m.movie_name
+    -> order by liked_by desc
+    -> limit 1;
++------------------+----------+
+| Most_liked_movie | liked_by |
++------------------+----------+
+| Sachin           |        4 |
++------------------+----------+
