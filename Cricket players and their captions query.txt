@@ -1,33 +1,16 @@
 mysql> create database CricketTeam;
 Query OK, 1 row affected (0.01 sec)
 
-mysql> use database cricketteam;
-ERROR 1049 (42000): Unknown database 'database'
-mysql> use database CricketTeam;
-ERROR 1049 (42000): Unknown database 'database'
 mysql> use Cricketteam;
 Database changed
 mysql> create table PlayersList(Player_Id varchar(7) primary key,Player_Name varchar(50) not null,Caption_Id varchar(7) default Null);
 Query OK, 0 rows affected (0.10 sec)
 
-mysql> insert into PlayerList(Player_Id,Player_Name,Caption_Id) values
-    -> ('I 18','Virat kohli');
-ERROR 1146 (42S02): Table 'cricketteam.playerlist' doesn't exist
-mysql> insert into PlayerList(Player_Id,Player_Name,Caption_Id) values
-    -> ('I 18','Virat kohli','null');
-ERROR 1146 (42S02): Table 'cricketteam.playerlist' doesn't exist
-mysql> insert into PlayersList(Player_Id,Player_Name,Caption_Id) values
-    -> ('I 18','Virat kohli');
-ERROR 1136 (21S01): Column count doesn't match value count at row 1
 mysql> insert into PlayersList(Player_Id,Player_Name,Caption_Id) values
     -> ('I 18','Virat kohli',Null);
 Query OK, 1 row affected (0.01 sec)
 
-mysql> insert into PlayersList(Player_Id,Player_Name,Caption_Id) values
-    -> ('I 20'.'AShwin','I 18'),
-    -> ('I 20'.'AShwin','I 18');
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '.'AShwin','I 18'),
-('I 20'.'AShwin','I 18')' at line 2
+
 mysql> insert into PlayersList(Player_Id,Player_Name,Caption_Id) values
     -> ('I 20','Ashwin','I 18'),
     -> ('I 07','Dhoni',Null),
@@ -89,13 +72,6 @@ mysql> select P.Player_Id as Player_Id,
 +-----------+----------------+------------+------------------+
 10 rows in set (0.00 sec)
 
-mysql> select * from PlayersList where Caption_Id=Null;
-Empty set (0.00 sec)
-
-mysql> select * from PlayersList where Caption_Id Null;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Null' at line 1
-mysql> select * from PlayersList where Caption_Id='Null';
-Empty set (0.00 sec)
 
 mysql> select * from PlayersList where Caption_Id is Null;
 +-----------+------------------+------------+
