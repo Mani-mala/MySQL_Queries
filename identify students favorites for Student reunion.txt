@@ -11,11 +11,6 @@ mysql> create table Students(
 Query OK, 0 rows affected (0.06 sec)
 
 mysql> create table Geners(
-    -> Gener_Id int auto increment primary key,
-    -> Gener_Name varchar(60) not null );
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'auto increment primary key,
-Gener_Name varchar(60) not null )' at line 2
-mysql> create table Geners(
     -> Gener_Id int auto_increment primary key,
     -> Gener_Name varchar(60) not null );
 Query OK, 0 rows affected (0.05 sec)
@@ -738,3 +733,23 @@ mysql> select m.movie_name as Most_liked_movie, count(*) as liked_by
 +------------------+----------+
 | Sachin           |        4 |
 +------------------+----------+
+
+			//IDEAL FRIENDS GROUP WHO SHARE SIMILAR TASTES
+			==============================================
+
+mysql> select group_concat(s.name),sm.mall_name,b.beach_name,m.movie_name
+    -> from students s
+    -> join student_favorite_mall sfm on s.student_id=sfm.student_id
+    -> join student_favorite_beach sb on s.student_id=sb.student_id
+    -> join student_favorite_movie sfmm on s.student_id=sfmm.student_id
+    -> join shopping_malls sm on sm.mall_id=sfm.mall_id
+    -> join beaches b on b.beach_id=sb.beach_id
+    -> join movies m on m.movie_id=sfmm.movie_id
+    -> group by sfm.mall_id,sb.beach_id,sfmm.movie_id
+    -> having count(*) >=2;
++----------------------+--------------+---------------------+------------+
+| group_concat(s.name) | mall_name    | beach_name          | movie_name |
++----------------------+--------------+---------------------+------------+
+| Mani,Karthi,Krithi   | Phoenix Mall | Thiruvanmiyut Beach | Sarvam     |
++----------------------+--------------+---------------------+------------+
+
